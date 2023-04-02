@@ -6,7 +6,6 @@ SELECT pokemons.name, pokemons.primary_type, types.name
 FROM pokemons
 INNER JOIN types ON pokemons.primary_type = types.id;
 
-
 --* What is Rufflet's secondary type?
 SELECT secondary_type
 FROM pokemons
@@ -24,7 +23,25 @@ FROM pokemons
 INNER JOIN types ON pokemons.secondary_type = types.id
 WHERE types.name = 'Poison';
 
+-- or:
+SELECT COUNT(*) FROM pokemons
+INNER JOIN types ON pokemons.secondary_type = types.id
+WHERE types.name = 'Poison';
 
 --* What are all the primary types and how many pokemon have that type?
---* How many pokemon at level 100 does each trainer with at least one level 100 pokemone have? (Hint: your query should not display a trainer
+SELECT COUNT(pokemons.primary_type), types.name FROM types
+LEFT JOIN pokemons on pokemons.primary_type = types.id
+GROUP BY types.id;
+
+--* How many pokemon at level 100 does each trainer with at least one level 100 pokemon have? (Hint: your query should not display a trainer
+SELECT trainerID, COUNT(*)
+FROM pokemon_trainer
+WHERE pokelevel >= 100
+GROUP BY trainerID;
+
 --* How many pokemon only belong to one trainer and no other?
+SELECT COUNT(pokemon_trainer.pokemon_id), pokemons.name FROM pokemon_trainer
+INNER JOIN pokemons on pokemons.id = pokemon_trainer.pokemon_id
+GROUP BY pokemon_id
+HAVING COUNT(*) =  1;
+
